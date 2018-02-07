@@ -13,22 +13,30 @@ BinarySearchTree.prototype.includesNode = includesNode;
 
 // INPUTS: BinaryNode to start at (BinarySearchTree's root), number to insert into the BinarySearchTree
 // OUTPUT: None (no return necessary), but `console.log`ing the BinarySearchTree should show an updated tree
-function insertNode(currentNode, numToInsert) {
-	if (!currentNode) {
-		currentNode = new BinaryNode(numToInsert, null, null);
+function insertNode(numToInsert) {
+	if (!this.root) {
+		this.root = new BinaryNode(numToInsert, null, null);
 	} else {
-		let direction = numToInsert < currentNode.value ? 'left' : 'right';
-		if (!currentNode[direction]) {
-			currentNode[direction] = new BinaryNode(numToInsert, null, null);
-		} else {
-			insertNode(currentNode[direction], numToInsert);
-		}
+		insertNodeHelper(this.root, numToInsert);
+	}
+}
+
+function insertNodeHelper(currentNode, numToInsert) {
+	let direction = numToInsert < currentNode.value ? 'left' : 'right';
+	if (!currentNode[direction]) {
+		currentNode[direction] = new BinaryNode(numToInsert, null, null);
+	} else {
+		insertNodeHelper(currentNode[direction], numToInsert);
 	}
 }
 
 // INPUTS: BinaryNode to start at (BinarySearchTree's root), number to find in the BinarySearchTree
 // OUTPUT: Boolean value representing whether number was found
-function includesNode(currentNode, numToFind) {
+function includesNode(numToFind) {
+	return includesNodeHelper(this.root, numToFind);
+}
+
+function includesNodeHelper(currentNode, numToFind) {
 	if (!currentNode) {
 		return false;
 	} else if (currentNode.value == numToFind) {
@@ -38,7 +46,7 @@ function includesNode(currentNode, numToFind) {
 		if (!currentNode[direction]) {
 			return false;
 		} else {
-			return includesNode(currentNode[direction], numToFind);
+			return includesNodeHelper(currentNode[direction], numToFind);
 		}
 	}
 }
@@ -46,7 +54,7 @@ function includesNode(currentNode, numToFind) {
 
 
 // Test your code's functionality in your Node REPL
-// Run `node` in your Terminal to open your Node REPL, 
+// Run `node` in your Terminal to open your Node REPL,
 // then load this file using `.load binary-tree.js`
 
 // *****ORIGINAL BINARY TREE*****
